@@ -1,12 +1,14 @@
 from Deck import Deck
 from Coder import Coder
 trans = {
-    '~' : ' ',
-    '0' : '█',
-    '.' : '·',
-    '?' : '·',
-    '*' : 'X',
-    '^' : '░'
+    '~' : ' ', # shot cell without a ship
+    '0' : '█', # not shot cell with a ship (not hidden)
+    '.' : '·', # not shot cell without a ship
+    '?' : '·', # not shot cell with a ship (hidden)
+    '*' : 'X', # shot cell with a ship
+    '^' : '░', # not shot cell with a ship (revealed)
+    '!' : 'X', # cell with a ship (can't be placed due to rules)
+    '#' : '░'  # cell with a ship (cofiguring ship)
 }
 forma = [
     [" 12345678910"],
@@ -70,3 +72,8 @@ class Interface :
                 res = [-100, -100]
         return res
     
+    @staticmethod
+    def confDeck(dck, seed) :
+        print('For now your ships will be random')
+        dck.rnd(seed)
+        
