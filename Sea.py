@@ -8,8 +8,7 @@ class Sea :
         [compDeck, userDeck] = [Deck.Deck(), Deck.Deck()]
         seed = Interface.askSeed()
         compDeck.hide()
-        print('For now your ships will be random as well')
-        userDeck.rnd(seed + 1)
+        Interface.confDeck(userDeck, seed + 1)
         qt = 0
         qs = 0
         qtc = 0
