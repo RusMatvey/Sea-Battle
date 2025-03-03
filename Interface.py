@@ -45,20 +45,20 @@ class Interface :
     
     @staticmethod
     def askSeed() :
-        print('Please enter game seed:')
+        print('    Please enter game seed:', end="\n>")
         res = 0
         while res == 0 :
             try:
                 res = int(input())
                 break
             except ValueError :
-                print('Thats not a number... Try again:')
+                print('    Thats not a number... Try again:', end="\n>")
                 res = 0
         return res
     
     @staticmethod
     def askTurn() :
-        print('''Now it's your turn! Choose where to shoot:''')
+        print('''    Now it's your turn! Choose where to shoot:''', end="\n>")
         res = [-100, -100]
         while(res == [-100, -100]) :
             inp = input()
@@ -68,12 +68,32 @@ class Interface :
                 return 'Skip'
             res = Coder.decode(inp)
             if res == 'InvalidNotation' :
-                print('Invalid cell notation. Try again:')
+                print('    Invalid cell notation. Try again:', end="\n>")
                 res = [-100, -100]
         return res
     
     @staticmethod
-    def confDeck(dck, seed) :
-        print('For now your ships will be random')
+    def confDeck(seed) :
+        #print('For now your ships will be random')
+        dck = Deck()
         dck.rnd(seed)
+        print("""    Now you'll make your deck :\n\n    ░ - currently chosen configuring ship\n\n        commands list:\n\n    [R/r] - rotate ship\n\n    [W/w/A/a/S/s/D/d] - move ship in wasd\n\n    [C/c] - next ship\n\n    [Q/q] - randomise\n\n    [F/f] - go to battle""")
+        ci = 0
+        while True :
+            dck.render(ci)
+            showDeck(dck)
+            print('', end='\n>')
+            req = input()
+            if req == 'f' or req == 'F' :
+                print("Are you sure? [Y/N]:", end='\n>')
+                sure = input()
+                if sure == 'Y' or sure == 'y' :
+                    if dck.good() :
+                        return dck
+                    else :
+                        print("""Your ships violate the rules. Invalid ships marked with X :""")
+            
+            
+        #print(dck.deck)
+        return dck
         
