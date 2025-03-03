@@ -34,89 +34,129 @@ class Deck:
     deck = []
     realDeckSize = 0
     ships = []
-    #alive = []
+    rotstate = []
     aura = []
     win = False
-    #auto = 0
     
     def __init__(self, deckSize = 10) :
-        #self.auto = auto
         self.win = False
         self.realDeckSize = deckSize
-        self.deck = [['.' for i in range(self.realDeckSize + 4)] for t in range(self.realDeckSize + 4)]
-        #self.deck = [*self.deck]
-        #self.ships = [*self.ships]
-        #self.aura = [*self.aura]
-    
+        self.deck = [['.' for i in range(self.realDeckSize + 5)] for t in range(self.realDeckSize + 5)]
+        self.rotstate = []
+        self.ships = []
+        self.aura = []
+        self.win = False
     
     def clear(self) :
-        self.deck = [['.' for i in range(self.realDeckSize + 4)] for t in range(self.realDeckSize + 4)]
-        self.ships.clear()
+        self.deck = [['.' for i in range(self.realDeckSize + 5)] for t in range(self.realDeckSize + 5)]
+        self.ships = []
+        self.rotstate = []
+        self.aura = []
         self.win = False
                 
     def good(self) :
-        for ship in self.ships : 
-            for shipPart in ship :
-                if shipPart[0] < 1 or shipPart[1] < 1 or shipPart[0] > self.realDeckSize or shipPart[1] > self.realDeckSize :
+        for i in self.deck :
+            for t in i :
+                if t == '!' :
                     return False
-        for i in range(len(self.ships)) :
-            for s1 in self.ships[i] :
-                for t in range(i + 1, len(self.ships)) :
-                    for s2 in range(len(self.ships[t])) :
-                        if s1 == self.ships[t][s2] :
-                            return False
-                    for t in range(i + 1, len(self.ships)) :
-                        for s2 in self.ships[t] :
-                            if abs(s1[0] - s2[0]) <= 1 and abs(s1[1] - s2[1]) <= 1 :
-                                return False
+        return True
+        #for ship in self.ships : 
+        #    for shipPart in ship :
+        #        if shipPart[0] < 1 or shipPart[1] < 1 or shipPart[0] > self.realDeckSize or shipPart[1] > self.realDeckSize :
+        #            return False
+        #for i in range(len(self.ships)) :
+        #    for s1 in self.ships[i] :
+        #        for t in range(i + 1, len(self.ships)) :
+        #            for s2 in range(len(self.ships[t])) :
+        #                if s1 == self.ships[t][s2] :
+        #                    return False
+        #            for t in range(i + 1, len(self.ships)) :
+        #                for s2 in self.ships[t] :
+        #                    if abs(s1[0] - s2[0]) <= 1 and abs(s1[1] - s2[1]) <= 1 :
+        #                        return False
+        #return True
+    
+    def nextShip(self, shipi) :
+        return (shipi + 1) % len(self.ships)
+    
+    def inDeck(self, ship) :
+        for i in ship :
+            for t in i :
+                if t < 1 or t > self.realDeckSize :
+                    return False
         return True
     
+    def moveShip(self, shipi, d) :
+        ship = self.ships[shipi]
+        for i in range(len(ship)) :
+            ship[i] += d
+        if not self.inDeck(ship) :
+            return False
+        for t in range(len(self.ships[shipi])) :
+            self.ships[shipi][t] += d
+        for t in range(len(self.aura[shipi][1])) :
+            self.aura[shipi][1][t] += d
+        for i in range(len(self.aura[shipi][0])) :
+            for t in range(len(self.aura[shipi][0][i])) :
+                self.aura[shipi][0][i][t] += d
+    
+    def rotateShip(self, shipi) :
+        if len(ships[shipi]) == 1 :
+            return False
+        st = self.ships[shipi][0]
+        nrot = (self.rotstate[shipi] + 1) % len(ships[shipi])
+        //
+        
+        
     
     def rnd(self, cseed = []) :
         if cseed != [] :
             random.seed(cseed)
-        self.ships = [[[0, 0]], [[0, 0]]]
-        while not self.good() :
-            self.ships = []
-            self.aura = []
+        while True :
+            self.clear[]
             for shipSeti in range(len(ships)) :
                 shipVari = random.randrange(0, len(ships[shipSeti]))
+                self.rotState
                 shipCoord = [random.randrange(1, self.realDeckSize + 1), random.randrange(1, self.realDeckSize + 1)]
                 self.ships.append([])
                 self.aura.append([[], list(map(lambda a: [a[0] + shipCoord[0], a[1] + shipCoord[1]], aura[shipSeti][shipVari][1]))])
                 for shipPart in ships[shipSeti][shipVari] :
                     self.ships[len(self.ships) - 1].append([shipCoord[0] + shipPart[0], shipCoord[1] + shipPart[1]])
-                    #print(shipSeti)
-                    #print(shipVari)
-                    #print(len(self.aura[len(self.aura) - 1][0]))
-                    #print(aura[shipSeti][shipVari][0][len(self.aura[len(self.aura) - 1][0])])
                     self.aura[len(self.aura) - 1][0].append(list(map(lambda a: [a[0] + shipCoord[0], a[1] + shipCoord[1]], aura[shipSeti][shipVari][0][len(self.aura[len(self.aura) - 1][0])])))
-        #print(self.ships)
-        for i in range(1, self.realDeckSize + 1) :
-            for t in range(1, self.realDeckSize + 1) :
-                self.deck[i][t] = '.'
+            self.render()
+            if self.good() :
+                return
+                        
+    
+    def render(self, si = -1) :
+        self.clear()
         for ship in self.ships :
             for shipPart in ship :
-                self.deck[shipPart[0]][shipPart[1]] = '0'
-        #self.revive()
-    
-    """
-    def revive(self) :
-        self.alive = []
-        for i in range(len(self.ships)) :
-            self.alive.append([])
-            for t in ships[i] :
-                self.alive[i].append(True)
-    """
+                if self.deck[shipPart[0]][shipPart[1]] == '.' :
+                    self.deck[shipPart[0]][shipPart[1]] = '0'
+                else :
+                    self.deck[shipPart[0]][shipPart[1]] = '!'
+                    
+        for saura in self.aura :
+            for caura in saura[0] :
+                for forb in caura :
+                    if self.deck[forb[0]][forb[1]] == '0' :
+                        self.deck[forb[0]][forb[1]] = '!'
+            for forb in saura[1] :
+                if self.deck[forb[0]][forb[1]] == '0' :
+                    self.deck[forb[0]][forb[1]] = '!'
+        if si != -1 :
+            for shipPart in ships[si] :
+                self.deck[shipPart[0]][shipPart[1]] = '#'
+        for i in range(len(self.deck)) :
+            for t in range(len(self.deck[i])) :
+                if (i < 1 or i > self.realDeckSize or t < 1 or )
+                
     
     def hide(self) :
         for i in self.ships :
             for t in i :
-                #print(t)
-                #print(self.deck[t[0]][t[1]])
                 self.deck[t[0]][t[1]] = '?'
-                #print(self.deck[t[0]][t[1]])
-        #print(self.deck)
     
     def reveal(self) :
         for i in self.ships :
@@ -125,7 +165,6 @@ class Deck:
 
     def shoot(self, f, request, qt, qs, show, a, b) :
         while(True) :
-            #print("show time")
             show(a, b)
             print(request)
             wh = f()
@@ -145,21 +184,20 @@ class Deck:
             [x, y] = wh
             if self.deck[x][y] == '~' :
                 qs += 1
-                print('That cell was empty anyway')
+                print('    That cell was empty anyway')
                 continue
             if self.deck[x][y] == '.' :
                 self.deck[x][y] = '~'
                 qs += 1
                 qt += 1
-                print('Miss')
+                print('    Miss')
                 return [qt, qs]
             if self.deck[x][y] == '*' :
                 qs += 1
-                print('This part has already drowned')
+                print('    This part has already drowned')
                 continue
             self.deck[x][y] = '*'
             qs += 1
-            #qt += 1
             res = 0
             for shipi in range(len(self.ships)) :
                 for parti in range(len(self.ships[shipi])) :
@@ -174,14 +212,13 @@ class Deck:
                                 self.deck[also[0]][also[1]] = '~'
                             self.aura.pop(shipi)
                             self.ships.pop(shipi)
-                            print('Drowned')
+                            print('    Drowned')
                             res = 2
                             if self.ships == [] :
-                                #print('You drowned a ship')
                                 self.win = True
                                 return [qt + 1, qs]
                             break
-                        print('Shot')
+                        print('    Shot')
                         break
                 if res != 0 :
                     break    
