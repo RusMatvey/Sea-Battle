@@ -1,5 +1,6 @@
 from Deck import Deck
 from Coder import Coder
+import random
 trans = {
     '~' : ' ', # shot cell without a ship
     '0' : '█', # not shot cell with a ship (not hidden)
@@ -23,6 +24,17 @@ forma = [
     ["I", [9, 1], [9, 2], [9, 3], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], ' '],
     ["J", [10, 1], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [10, 8], [10, 9], [10, 10], ' ']
 ]
+whMove = {
+    'w' : [-1, 0]
+    'W' : [-1, 0]
+    'a' : [0, -1]
+    'A' : [0, -1]
+    's' : [1, 0]
+    'S' : [1, 0]
+    'd' : [0, 1]
+    'D' : [0, 1]
+    
+}
 class Interface :
     @staticmethod
     def showDeck(dck1, dck2 = -1) :
@@ -77,7 +89,7 @@ class Interface :
         #print('For now your ships will be random')
         dck = Deck()
         dck.rnd(seed)
-        print("""    Now you'll make your deck :\n\n    ░ - currently chosen configuring ship\n\n        commands list:\n\n    [R/r] - rotate ship\n\n    [W/w/A/a/S/s/D/d] - move ship in wasd\n\n    [C/c] - next ship\n\n    [Q/q] - randomise\n\n    [F/f] - go to battle""")
+        print("""    Now you'll make your deck :\n\n    ░ - currently chosen configuring ship\n\n        commands list:\n\n    [R/r] - rotate ship\n\n    [W/w/A/a/S/s/D/d] - move ship in WASD\n\n    [C/c] - next ship\n\n    [Q/q] - randomise\n\n    [F/f] - go to battle""")
         ci = 0
         while True :
             dck.render(ci)
@@ -92,6 +104,22 @@ class Interface :
                         return dck
                     else :
                         print("""Your ships violate the rules. Invalid ships marked with X :""")
+            elif req == 'r' or req == 'R' :
+                if not dck.rotateShip(ci) :
+                    print("""Can't rotate this ship""")
+            elif req in whMove :
+                if not dck.moveShip(ci, whMove[req]) : 
+                    print("""Can't move ship this way""")
+            elif req == 'Q' or req == 'q' :
+                random.seed(seed + 1)
+                seed = random.getrandbits(60)
+                dck.rnd(seed)
+            elif req == 'C' or req == 'c' :
+                ci = dck.nextShip(ci)
+            elif req == 'Platzdarm' :
+                return dck
+            else :
+                print('Unknown command')
             
             
         #print(dck.deck)
