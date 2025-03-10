@@ -4,30 +4,31 @@ from Coder import Coder
 #from Interface import Interface
 #~0.?*
 ships = [
-    [[[0, 0]]],
-    [[[0, 0]]],
-    [[[0, 0]]],
-    [[[0, 0]]],
-    [[[0, 0], [0, 1]], [[0, 0], [1, 0]]],
-    [[[0, 0], [0, 1]], [[0, 0], [1, 0]]],
-    [[[0, 0], [0, 1]], [[0, 0], [1, 0]]],
+    [[[0, 0], [0, 1], [0, 2], [0, 3]], [[0, 0], [1, 0], [2, 0], [3, 0]]],
     [[[0, 0], [0, 1], [0, 2]], [[0, 0], [1, 0], [2, 0]]],
     [[[0, 0], [0, 1], [0, 2]], [[0, 0], [1, 0], [2, 0]]],
-    [[[0, 0], [0, 1], [0, 2], [0, 3]], [[0, 0], [1, 0], [2, 0], [3, 0]]]
+    [[[0, 0], [0, 1]], [[0, 0], [1, 0]]],
+    [[[0, 0], [0, 1]], [[0, 0], [1, 0]]],
+    [[[0, 0], [0, 1]], [[0, 0], [1, 0]]],
+    [[[0, 0]]],
+    [[[0, 0]]],
+    [[[0, 0]]],
+    [[[0, 0]]]
+    
 ]
 rcross = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 bcross = [[-1, -1], [-1, 1], [1, -1], [1, 1]]
 aura = [
-    [[[[*rcross, *bcross]], []]],
-    [[[[*rcross, *bcross]], []]],
-    [[[[*rcross, *bcross]], []]],
-    [[[[*rcross, *bcross]], []]],
-    [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross))], [[0, -1], [0, 2]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross))], [[-1, 0], [2, 0]]]],
-    [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross))], [[0, -1], [0, 2]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross))], [[-1, 0], [2, 0]]]],
-    [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross))], [[0, -1], [0, 2]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross))], [[-1, 0], [2, 0]]]],
+        [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross)), list(map(lambda a: [a[0], a[1] + 2], bcross)), list(map(lambda a: [a[0], a[1] + 3], bcross))], [[0, -1], [0, 4]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross)), list(map(lambda a: [a[0] + 2, a[1]], bcross)), list(map(lambda a: [a[0] + 3, a[1]], bcross))], [[-1, 0], [4, 0]]]],
     [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross)), list(map(lambda a: [a[0], a[1] + 2], bcross))], [[0, -1], [0, 3]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross)), list(map(lambda a: [a[0] + 2, a[1]], bcross))], [[-1, 0], [3, 0]]]],
     [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross)), list(map(lambda a: [a[0], a[1] + 2], bcross))], [[0, -1], [0, 3]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross)), list(map(lambda a: [a[0] + 2, a[1]], bcross))], [[-1, 0], [3, 0]]]],
-    [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross)), list(map(lambda a: [a[0], a[1] + 2], bcross)), list(map(lambda a: [a[0], a[1] + 3], bcross))], [[0, -1], [0, 4]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross)), list(map(lambda a: [a[0] + 2, a[1]], bcross)), list(map(lambda a: [a[0] + 3, a[1]], bcross))], [[-1, 0], [4, 0]]]]
+    [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross))], [[0, -1], [0, 2]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross))], [[-1, 0], [2, 0]]]],
+    [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross))], [[0, -1], [0, 2]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross))], [[-1, 0], [2, 0]]]],
+    [[[[*bcross], list(map(lambda a: [a[0], a[1] + 1], bcross))], [[0, -1], [0, 2]]], [[[*bcross], list(map(lambda a: [a[0] + 1, a[1]], bcross))], [[-1, 0], [2, 0]]]],
+    [[[[*rcross, *bcross]], []]],
+    [[[[*rcross, *bcross]], []]],
+    [[[[*rcross, *bcross]], []]],
+    [[[[*rcross, *bcross]], []]]
 ]
 class Deck:
     
@@ -87,25 +88,31 @@ class Deck:
         return True
     
     def moveShip(self, shipi, d) :
-        ship = self.ships[shipi]
-        for i in range(len(ship)) :
-            ship[i] += d
+        ship = [[t[0] + d[0], t[1] + d[1]] for t in self.ships[shipi]]
+        #print(ship)
         if not self.inDeck(ship) :
             return False
         for t in range(len(self.ships[shipi])) :
-            self.ships[shipi][t] += d
+            self.ships[shipi][t] = [self.ships[shipi][t][k] + d[k] for k in [0, 1]]
         for t in range(len(self.aura[shipi][1])) :
-            self.aura[shipi][1][t] += d
+            self.aura[shipi][1][t] = [self.aura[shipi][1][t][k] + d[k] for k in [0, 1]]
         for i in range(len(self.aura[shipi][0])) :
             for t in range(len(self.aura[shipi][0][i])) :
-                self.aura[shipi][0][i][t] += d
+                self.aura[shipi][0][i][t] = [self.aura[shipi][0][i][t][k] + d[k] for k in [0, 1]]
+        return True
     
     def rotateShip(self, shipi) :
         if len(ships[shipi]) == 1 :
             return False
         st = self.ships[shipi][0]
         nrot = (self.rotstate[shipi] + 1) % len(ships[shipi])
-        //
+        ship = [[i[0] + st[0], i[1] + st[1]] for i in ships[shipi][nrot]]
+        if not self.inDeck(ship) :
+            return False
+        self.ships[shipi] = ship
+        self.aura[shipi] = [[[[st[0] + t[0], st[1] + t[1]] for t in i] for i in aura[shipi][nrot][0]], [[st[0] + v[0], st[1] + v[1]] for v in aura[shipi][nrot][1]]]
+        self.rotstate[shipi] = nrot
+        return True
         
         
     
@@ -113,23 +120,22 @@ class Deck:
         if cseed != [] :
             random.seed(cseed)
         while True :
-            self.clear[]
-            for shipSeti in range(len(ships)) :
-                shipVari = random.randrange(0, len(ships[shipSeti]))
-                self.rotState
-                shipCoord = [random.randrange(1, self.realDeckSize + 1), random.randrange(1, self.realDeckSize + 1)]
-                self.ships.append([])
-                self.aura.append([[], list(map(lambda a: [a[0] + shipCoord[0], a[1] + shipCoord[1]], aura[shipSeti][shipVari][1]))])
-                for shipPart in ships[shipSeti][shipVari] :
-                    self.ships[len(self.ships) - 1].append([shipCoord[0] + shipPart[0], shipCoord[1] + shipPart[1]])
-                    self.aura[len(self.aura) - 1][0].append(list(map(lambda a: [a[0] + shipCoord[0], a[1] + shipCoord[1]], aura[shipSeti][shipVari][0][len(self.aura[len(self.aura) - 1][0])])))
+            self.clear()
+            self.rotstate = [random.randrange(0, len(ships[shipSeti])) for shipSeti in range(len(ships))]
+            sts = [[random.randrange(1, self.realDeckSize + 1), random.randrange(1, self.realDeckSize + 1)] for i in range(len(ships))]
+            self.ships = [[[t[0] + sts[i][0], t[1] + sts[i][1]] for t in ships[i][self.rotstate[i]]] for i in range(len(ships))]
+            self.aura = [[[[[k[0] + sts[i][0], k[1] + sts[i][1]] for k in v] for v in aura[i][self.rotstate[i]][0]], [[t[0] + sts[i][0], t[1] + sts[i][1]] for t in aura[i][self.rotstate[i]][1]]] for i in range(len(ships))]
+            #print(self.ships)
             self.render()
             if self.good() :
+                #print(self.ships)
+                #print(self.rotstate)
+                #print([[[t[0] + sts[i][0], t[1] + sts[i][1]] for t in [ships[i][self.rotstate[i]][0]]] for i in [0]])
                 return
                         
     
     def render(self, si = -1) :
-        self.clear()
+        self.deck = [['.' for i in range(self.realDeckSize + 5)] for t in range(self.realDeckSize + 5)]
         for ship in self.ships :
             for shipPart in ship :
                 if self.deck[shipPart[0]][shipPart[1]] == '.' :
@@ -145,12 +151,16 @@ class Deck:
             for forb in saura[1] :
                 if self.deck[forb[0]][forb[1]] == '0' :
                     self.deck[forb[0]][forb[1]] = '!'
+        #print(si)
+        #print(self.ships)
         if si != -1 :
-            for shipPart in ships[si] :
+            for shipPart in self.ships[si] :
                 self.deck[shipPart[0]][shipPart[1]] = '#'
-        for i in range(len(self.deck)) :
-            for t in range(len(self.deck[i])) :
-                if (i < 1 or i > self.realDeckSize or t < 1 or )
+        for ship in self.ships :
+            for shipPart in ship :
+                for t in shipPart :
+                    if t < 1 or t > self.realDeckSize :
+                        self.deck[shipPart[0]][shipPart[1]] = '!'
                 
     
     def hide(self) :

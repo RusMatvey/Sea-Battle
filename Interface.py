@@ -25,13 +25,13 @@ forma = [
     ["J", [10, 1], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [10, 8], [10, 9], [10, 10], ' ']
 ]
 whMove = {
-    'w' : [-1, 0]
-    'W' : [-1, 0]
-    'a' : [0, -1]
-    'A' : [0, -1]
-    's' : [1, 0]
-    'S' : [1, 0]
-    'd' : [0, 1]
+    'w' : [-1, 0],
+    'W' : [-1, 0],
+    'a' : [0, -1],
+    'A' : [0, -1],
+    's' : [1, 0],
+    'S' : [1, 0],
+    'd' : [0, 1],
     'D' : [0, 1]
     
 }
@@ -89,11 +89,11 @@ class Interface :
         #print('For now your ships will be random')
         dck = Deck()
         dck.rnd(seed)
-        print("""    Now you'll make your deck :\n\n    ░ - currently chosen configuring ship\n\n        commands list:\n\n    [R/r] - rotate ship\n\n    [W/w/A/a/S/s/D/d] - move ship in WASD\n\n    [C/c] - next ship\n\n    [Q/q] - randomise\n\n    [F/f] - go to battle""")
+        print("""    Now you'll make your deck :\n\n    ░ - currently chosen configuring ship\n\n        commands list:\n\n    [R/r] - rotate ship\n\n    [W/w/A/a/S/s/D/d] - move ship in WASD\n\n    [C/c] - next ship\n\n    [Q/q] - randomise\n\n    [F/f] - go to battle\n\n    [H/h] - repeat command list""")
         ci = 0
         while True :
             dck.render(ci)
-            showDeck(dck)
+            Interface.showDeck(dck)
             print('', end='\n>')
             req = input()
             if req == 'f' or req == 'F' :
@@ -101,6 +101,7 @@ class Interface :
                 sure = input()
                 if sure == 'Y' or sure == 'y' :
                     if dck.good() :
+                        #dck.render()
                         return dck
                     else :
                         print("""Your ships violate the rules. Invalid ships marked with X :""")
@@ -116,6 +117,8 @@ class Interface :
                 dck.rnd(seed)
             elif req == 'C' or req == 'c' :
                 ci = dck.nextShip(ci)
+            elif req == 'H' or req == 'h' :
+                print("""\n    ░ - currently chosen configuring ship\n\n        commands list:\n\n    [R/r] - rotate ship\n\n    [W/w/A/a/S/s/D/d] - move ship in WASD\n\n    [C/c] - next ship\n\n    [Q/q] - randomise\n\n    [F/f] - go to battle\n\n    [H/h] - repeat command list""")
             elif req == 'Platzdarm' :
                 return dck
             else :

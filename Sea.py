@@ -7,8 +7,11 @@ class Sea :
     def main(self) :
         [compDeck, userDeck] = [Deck.Deck(), Deck.Deck()]
         seed = Interface.askSeed()
+        compDeck.rnd(seed)
         compDeck.hide()
-        Interface.confDeck(userDeck, seed + 1)
+        userDeck = Interface.confDeck(seed + 1)
+        userDeck.render()
+        #print(userDeck.deck)
         qt = 0
         qs = 0
         qtc = 0
@@ -23,10 +26,10 @@ class Sea :
                 break
             [qtc, qsc] = userDeck.shoot(userDeck.simpStrat, "Computer's turn:", qtc, qsc, Interface.showDeck, compDeck, userDeck)
             if qtc == 'err' :
-                print('Error whith shooting', qs)
+                print('Error with shooting', qs)
                 break
             if compDeck.win :
-            print('It took you', qt, 'turns and', qs, 'shots to win')
+                print('It took you', qt, 'turns and', qs, 'shots to win')
         else :
             compDeck.reveal()
             print('Unfortunately, you lose\nIt took computer', qtc, 'turns and', qsc, 'shots to win')
