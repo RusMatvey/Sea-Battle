@@ -250,9 +250,9 @@ class Deck:
         toshoot = []
         for x in range(1, self.realDeckSize + 1) : 
             for y in range(1, self.realDeckSize + 1) :
-                if self.deck[x][y] == '*' or self.deck[x][y] == '.' :
+                if self.deck[x][y] == '*' :
                     for [dx, dy] in rcross :
-                        if self.deck[x + dx][y + dy] == '.' and x + dx > 0 and y + dy > 0 and x + dx <= self.realDeckSize and y + dy <= self.realDeckSize :
+                        if (self.deck[x + dx][y + dy] == '.' or self.deck[x + dx][y + dy] == '?' or self.deck[x + dx][y + dy] == '0') and x + dx > 0 and y + dy > 0 and x + dx <= self.realDeckSize and y + dy <= self.realDeckSize :
                             toshoot.append([x + dx, y + dy])
         if toshoot == [] :
             return self.rndStrat()
